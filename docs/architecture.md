@@ -18,6 +18,10 @@ As a student at JIHC and a backend developer, I am deeply interested in how educ
 
 ### Component Diagram
 
+**SVG Diagram:**
+![Component Diagram](../diagrams/component-diagram.svg)
+
+**PlantUML Diagram:**
 ```mermaid
 componentDiagram
     component "User Browser" as Client
@@ -48,8 +52,12 @@ Backend creates record in PostgreSQL.
 
 Response: Backend returns 201 Created.
 
-Sequence Diagram
-Code snippet
+### Sequence Diagram
+
+**SVG Diagram:**
+![Sequence Diagram](../diagrams/sequence-diagram.svg)
+
+**PlantUML Diagram:**
 ```mermaid
 sequenceDiagram
     actor Student
@@ -83,8 +91,23 @@ Nginx: Exposed port 443.
 
 PostgreSQL: Private volume.
 
-Deployment Diagram
-Code snippet
+Deployment
+User Devices: Web browsers.
+
+Server: Cloud VPS (Linux/Ubuntu).
+
+Docker Compose: Orchestrates containers.
+
+Nginx: Exposed port 443.
+
+PostgreSQL: Private volume.
+
+### Deployment Diagram
+
+**SVG Diagram:**
+![Deployment Diagram](../diagrams/deployment-diagram.svg)
+
+**PlantUML Diagram:**
 ```mermaid
 C4Deployment
     title Deployment Diagram for EduPlatform
@@ -104,8 +127,135 @@ C4Deployment
     Rel(browser, nginx, "HTTPS", "443")
     Rel(nginx, api, "HTTP", "8000")
     Rel(api, db, "TCP", "5432")
-``` 
-Knowledge Gaps
-File Storage: Need to learn how to migrate from local storage to S3 object storage for scalability.
+```
 
-WebSockets: Need to figure out how to implement real-time notifications for teachers in FastAPI.
+## System Context Diagram
+
+**Context:** EduPlatform operates within the educational institution's IT ecosystem.
+
+**External Systems:**
+- **Student & Teacher Devices:** Web browsers (Chrome, Firefox, Safari)
+- **Email Service:** For notifications and password resets
+- **Cloud Storage (S3):** For scalable document storage
+- **Analytics Service:** For tracking platform usage and performance
+
+**Boundaries:**
+- System boundary: Everything within the VPS container
+- External entities: Users and third-party services
+
+## Database Schema (Conceptual)
+
+### Core Tables
+
+**users**
+```sql
+- id (PK)
+- username (UNIQUE)
+- email (UNIQUE)
+- password_hash
+- role (ENUM: admin, teacher, student)
+- created_at
+- updated_at
+```
+
+**courses**
+```sql
+- id (PK)
+- code (UNIQUE)
+- title
+- description
+- instructor_id (FK → users)
+- semester
+- capacity
+```
+
+**submissions**
+```sql
+- id (PK)
+- student_id (FK → users)
+- assignment_id (FK → assignments)
+- file_path
+- submitted_at
+- grade (nullable)
+- feedback (nullable)
+```
+
+**assignments**
+```sql
+- id (PK)
+- course_id (FK → courses)
+- title
+- description
+- deadline
+- max_points
+```
+
+## API Endpoints (Key Resources)
+
+### Authentication
+- `POST /api/auth/login` - User login (JWT token)
+- `POST /api/auth/logout` - User logout
+- `POST /api/auth/refresh` - Refresh JWT token
+
+### Courses
+- `GET /api/courses` - List all courses
+- `GET /api/courses/{id}` - Get course details
+- `POST /api/courses` - Create course (admin only)
+
+### Assignments
+- `GET /api/assignments?course_id={id}` - List assignments
+- `POST /api/assignments` - Create assignment (teacher)
+- `GET /api/assignments/{id}` - Get assignment details
+
+### Submissions
+- `POST /api/submissions` - Submit assignment
+- `GET /api/submissions/{id}` - Get submission details
+- `PUT /api/submissions/{id}/grade` - Grade submission (teacher)
+
+### Users
+- `GET /api/users/me` - Get current user profile
+- `PUT /api/users/me` - Update profile
+- `GET /api/users` - List users (admin only)
+
+## Security Architecture
+
+### Authentication & Authorization
+1. **JWT Tokens:** Short-lived access tokens (15 min) + refresh tokens (7 days)
+2. **Password Hashing:** Argon2 algorithm for secure password storage
+3. **HTTPS/TLS:** All traffic encrypted in transit
+4. **CORS Policy:** Restrict cross-origin requests to trusted domains
+
+### Role-Based Access Control (RBAC)
+```python
+# Middleware decorator example
+@app.get("/api/courses")
+@require_auth(roles=["admin", "teacher", "student"])
+def list_courses(user: User = Depends(get_current_user)):
+    return get_user_courses(user)
+```
+
+### Database Security
+- **SQL Injection Prevention:** SQLAlchemy ORM (parameterized queries)
+- **Row-Level Security:** Users can only access their own data
+- **Audit Logging:** Track all sensitive operations (logins, grade changes)
+
+## Risks & Mitigation
+
+| Risk | Impact | Mitigation |
+|------|--------|-----------|
+| **Database Breach** | Loss of student/teacher data | Encrypted passwords, regular backups, VPC isolation |
+| **Unauthorized Access** | Students see other students' grades | RBAC middleware, JWT validation on every request |
+| **File Storage Overload** | System crashes | S3 migration planned, file size limits enforced |
+| **DDoS Attacks** | Service unavailable | Nginx rate limiting, CloudFlare protection |
+| **Token Hijacking** | Account compromise | Short expiration times, secure cookie flags |
+| **Missing Backups** | Data loss | Daily automated backups to S3 |
+
+## Future Improvements
+
+1. **WebSocket Support** - Real-time notifications for grade releases
+2. **API Rate Limiting** - Prevent abuse with per-user quotas
+3. **Caching Layer** - Redis for improved performance
+4. **Mobile App** - React Native or Flutter application
+5. **Analytics Dashboard** - Track student progress and engagement
+6. **Payment Integration** - If platform becomes commercial (Stripe/PayPal)
+7. **Two-Factor Authentication** - Enhanced security with TOTP or SMS

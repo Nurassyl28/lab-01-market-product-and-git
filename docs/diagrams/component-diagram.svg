@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
+  <defs>
+    <style>
+      .box { fill: #E8F4F8; stroke: #0066CC; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; fill: #000; }
+      .title { font-size: 18px; font-weight: bold; }
+      .arrow { stroke: #0066CC; stroke-width: 2; marker-end: url(#arrowhead); }
+      .label { font-size: 12px; fill: #0066CC; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#0066CC" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="30" class="text title" text-anchor="middle">EduPlatform - Component Diagram</text>
+  
+  <!-- Components -->
+  <rect x="50" y="80" width="150" height="80" class="box" rx="5"/>
+  <text x="125" y="115" class="text" text-anchor="middle" font-weight="bold">User Browser</text>
+  <text x="125" y="135" class="text" text-anchor="middle" font-size="12">(Web Frontend)</text>
+  
+  <rect x="280" y="80" width="150" height="80" class="box" rx="5"/>
+  <text x="355" y="115" class="text" text-anchor="middle" font-weight="bold">API Gateway</text>
+  <text x="355" y="135" class="text" text-anchor="middle" font-size="12">(Nginx)</text>
+  
+  <rect x="510" y="80" width="150" height="80" class="box" rx="5"/>
+  <text x="585" y="115" class="text" text-anchor="middle" font-weight="bold">Backend API</text>
+  <text x="585" y="135" class="text" text-anchor="middle" font-size="12">(FastAPI)</text>
+  
+  <rect x="740" y="80" width="150" height="80" class="box" rx="5"/>
+  <text x="815" y="115" class="text" text-anchor="middle" font-weight="bold">Database</text>
+  <text x="815" y="135" class="text" text-anchor="middle" font-size="12">(PostgreSQL)</text>
+  
+  <!-- Secondary components -->
+  <rect x="280" y="300" width="150" height="80" class="box" rx="5"/>
+  <text x="355" y="335" class="text" text-anchor="middle" font-weight="bold">Auth Service</text>
+  <text x="355" y="355" class="text" text-anchor="middle" font-size="12">(JWT Middleware)</text>
+  
+  <rect x="510" y="300" width="150" height="80" class="box" rx="5"/>
+  <text x="585" y="335" class="text" text-anchor="middle" font-weight="bold">Document Storage</text>
+  <text x="585" y="355" class="text" text-anchor="middle" font-size="12">(Local/S3)</text>
+  
+  <!-- Arrows -->
+  <path d="M 200 120 L 280 120" class="arrow"/>
+  <text x="240" y="110" class="label">HTTPS</text>
+  
+  <path d="M 430 120 L 510 120" class="arrow"/>
+  <text x="470" y="110" class="label">Proxied</text>
+  
+  <path d="M 660 120 L 740 120" class="arrow"/>
+  <text x="700" y="110" class="label">SQL</text>
+  
+  <path d="M 585 160 L 585 300" class="arrow"/>
+  <text x="600" y="230" class="label">Validate</text>
+  
+  <path d="M 660 340 L 740 340" class="arrow"/>
+  <text x="700" y="330" class="label">Save/Load</text>
+  
+  <!-- Legend -->
+  <text x="50" y="500" class="text" font-weight="bold">Key Technologies:</text>
+  <text x="50" y="525" class="text">• Web Framework: FastAPI (Python)</text>
+  <text x="50" y="545" class="text">• Database: PostgreSQL 16</text>
+  <text x="50" y="565" class="text">• Proxy: Nginx (Reverse Proxy)</text>
+  
+  <text x="550" y="525" class="text">• Auth: JWT Tokens</text>
+  <text x="550" y="545" class="text">• Storage: Local or S3</text>
+  <text x="550" y="565" class="text">• Container: Docker</text>
+</svg>
