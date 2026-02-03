@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650">
+  <defs>
+    <style>
+      .device { fill: #F0F0F0; stroke: #333; stroke-width: 2; }
+      .container { fill: #E8F4F8; stroke: #0066CC; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 13px; fill: #000; }
+      .title { font-size: 18px; font-weight: bold; }
+      .label { font-size: 12px; fill: #333; }
+      .arrow { stroke: #0066CC; stroke-width: 2; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#0066CC" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="30" class="text title" text-anchor="middle">EduPlatform - Deployment Diagram</text>
+  
+  <!-- User Computers (Left) -->
+  <rect x="30" y="80" width="180" height="220" class="device" rx="5"/>
+  <text x="120" y="105" class="text" text-anchor="middle" font-weight="bold">User Computer</text>
+  <text x="120" y="125" class="label" text-anchor="middle">(Windows/macOS)</text>
+  
+  <!-- Browser -->
+  <rect x="60" y="150" width="120" height="70" class="container" rx="3"/>
+  <text x="120" y="175" class="text" text-anchor="middle" font-weight="bold">Web Browser</text>
+  <text x="120" y="195" class="label" text-anchor="middle">(Chrome/Firefox)</text>
+  
+  <!-- Cloud VPS (Right) -->
+  <rect x="280" y="80" width="650" height="400" class="device" rx="5"/>
+  <text x="605" y="105" class="text" text-anchor="middle" font-weight="bold">Cloud VPS (Ubuntu 22.04)</text>
+  
+  <!-- Docker Runtime -->
+  <rect x="310" y="140" width="600" height="320" class="container" rx="5" stroke-dasharray="5,5"/>
+  <text x="610" y="165" class="label" text-anchor="middle">Docker Runtime</text>
+  
+  <!-- Nginx -->
+  <rect x="340" y="190" width="140" height="60" class="container" rx="3"/>
+  <text x="410" y="220" class="text" text-anchor="middle" font-weight="bold">Nginx</text>
+  <text x="410" y="240" class="label" text-anchor="middle">(Reverse Proxy)</text>
+  
+  <!-- FastAPI -->
+  <rect x="530" y="190" width="140" height="60" class="container" rx="3"/>
+  <text x="600" y="220" class="text" text-anchor="middle" font-weight="bold">FastAPI</text>
+  <text x="600" y="240" class="label" text-anchor="middle">(Backend Service)</text>
+  
+  <!-- PostgreSQL -->
+  <rect x="720" y="190" width="140" height="60" class="container" rx="3"/>
+  <text x="790" y="220" class="text" text-anchor="middle" font-weight="bold">PostgreSQL</text>
+  <text x="790" y="240" class="label" text-anchor="middle">(Database)</text>
+  
+  <!-- Storage -->
+  <rect x="435" y="280" width="140" height="60" class="container" rx="3"/>
+  <text x="505" y="310" class="text" text-anchor="middle" font-weight="bold">Storage</text>
+  <text x="505" y="330" class="label" text-anchor="middle">(Local/S3)</text>
+  
+  <!-- Volume Storage -->
+  <rect x="625" y="280" width="140" height="60" class="container" rx="3"/>
+  <text x="695" y="310" class="text" text-anchor="middle" font-weight="bold">Data Volume</text>
+  <text x="695" y="330" class="label" text-anchor="middle">(PostgreSQL Data)</text>
+  
+  <!-- Connections -->
+  <!-- Browser to Nginx -->
+  <path d="M 210 190 L 280 190" class="arrow"/>
+  <text x="240" y="180" class="label">HTTPS:443</text>
+  
+  <!-- Nginx to FastAPI -->
+  <path d="M 480 220 L 530 220" class="arrow"/>
+  <text x="500" y="210" class="label">HTTP:8000</text>
+  
+  <!-- FastAPI to PostgreSQL -->
+  <path d="M 670 220 L 720 220" class="arrow"/>
+  <text x="690" y="210" class="label">TCP:5432</text>
+  
+  <!-- FastAPI to Storage -->
+  <path d="M 600 250 L 505 280" class="arrow"/>
+  <text x="540" y="270" class="label">Read/Write</text>
+  
+  <!-- FastAPI to Data Volume -->
+  <path d="M 650 250 L 680 280" class="arrow"/>
+  <text x="660" y="270" class="label">Mount</text>
+  
+  <!-- Legend -->
+  <rect x="30" y="520" width="900" height="100" fill="#FFFACD" stroke="#DAA520" stroke-width="1" rx="5"/>
+  <text x="50" y="545" class="text" font-weight="bold">Deployment Architecture Notes:</text>
+  <text x="50" y="570" class="text">• Port 443 (HTTPS) exposed to public internet</text>
+  <text x="50" y="590" class="text">• Port 8000 (FastAPI) internal, accessed only by Nginx</text>
+  <text x="50" y="610" class="text">• PostgreSQL isolated on private network, accessible only from FastAPI container</text>
+  
+  <text x="550" y="570" class="text">• Docker volumes ensure data persistence</text>
+  <text x="550" y="590" class="text">• TLS/SSL termination at Nginx layer</text>
+  <text x="550" y="610" class="text">• All services run in isolated containers</text>
+</svg>
