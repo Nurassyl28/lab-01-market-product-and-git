@@ -21,6 +21,9 @@ As a student at JIHC and a backend developer, I am deeply interested in how educ
 **SVG Diagram:**
 ![Component Diagram](../diagrams/component-diagram.svg)
 
+**PlantUML Source:**
+[Component Diagram (.puml)](../diagrams/component-diagram.puml)
+
 **PlantUML Diagram:**
 ```mermaid
 componentDiagram
@@ -56,6 +59,9 @@ Response: Backend returns 201 Created.
 
 **SVG Diagram:**
 ![Sequence Diagram](../diagrams/sequence-diagram.svg)
+
+**PlantUML Source:**
+[Sequence Diagram (.puml)](../diagrams/sequence-diagram.puml)
 
 **PlantUML Diagram:**
 ```mermaid
@@ -106,6 +112,9 @@ PostgreSQL: Private volume.
 
 **SVG Diagram:**
 ![Deployment Diagram](../diagrams/deployment-diagram.svg)
+
+**PlantUML Source:**
+[Deployment Diagram (.puml)](../diagrams/deployment-diagram.puml)
 
 **PlantUML Diagram:**
 ```mermaid
@@ -259,3 +268,27 @@ def list_courses(user: User = Depends(get_current_user)):
 5. **Analytics Dashboard** - Track student progress and engagement
 6. **Payment Integration** - If platform becomes commercial (Stripe/PayPal)
 7. **Two-Factor Authentication** - Enhanced security with TOTP or SMS
+
+## Knowledge Gaps
+
+As I deepen my understanding of EduPlatform architecture, I've identified key areas requiring further study:
+
+1. **File Storage Scalability**
+   - Current: Local file storage on VPS
+   - Gap: Need to learn cloud storage migration (AWS S3, MinIO)
+   - Impact: Local storage will become bottleneck with 1000+ students
+   - Action: Study boto3 library, S3 bucket policies, lifecycle management
+
+2. **Real-time Communication**
+   - Current: Synchronous HTTP/REST API
+   - Gap: Need WebSocket implementation for real-time notifications
+   - Impact: Teachers cannot receive instant grade submissions or notifications
+   - Action: Learn FastAPI WebSocket, socket.io, or gRPC for streaming
+   - Timeline: After Docker/testing skills
+
+3. **Database Performance at Scale**
+   - Current: Single PostgreSQL instance
+   - Gap: No horizontal scaling, indexing strategy incomplete
+   - Impact: Database will become bottleneck with 10,000+ concurrent users
+   - Action: Study query optimization, connection pooling (pgBouncer), replication
+   - Timeline: Q3-Q4 focus

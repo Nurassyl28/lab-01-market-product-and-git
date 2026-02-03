@@ -1,0 +1,35 @@
+@startuml Sequence_Diagram
+!theme plain
+
+title EduPlatform - Assignment Submission Flow
+
+actor Student
+participant "Web Frontend" as Frontend
+participant "FastAPI Backend" as Backend
+participant "PostgreSQL" as Database
+participant "Storage" as Storage
+
+Student -> Frontend: Click "Upload Assignment"
+activate Frontend
+
+Frontend -> Backend: POST /api/submissions\nwith file
+activate Backend
+
+Backend -> Backend: Validate JWT Token
+Backend -> Storage: Save file
+activate Storage
+Storage --> Backend: File path
+deactivate Storage
+
+Backend -> Database: INSERT INTO submissions
+activate Database
+Database --> Backend: ID: 101 (Created)
+deactivate Database
+
+Backend --> Frontend: 201 Created (JSON)
+deactivate Backend
+
+Frontend --> Student: "Assignment uploaded successfully"
+deactivate Frontend
+
+@enduml

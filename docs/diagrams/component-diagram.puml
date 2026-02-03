@@ -1,0 +1,30 @@
+@startuml Component_Diagram
+!theme plain
+
+title EduPlatform - Component Diagram
+
+package "User Layer" {
+    component [User Browser] as Browser
+}
+
+package "API Gateway Layer" {
+    component [Nginx Proxy] as Gateway
+}
+
+package "Application Layer" {
+    component [FastAPI Backend] as Backend
+    component [JWT Auth Service] as Auth
+}
+
+package "Data Layer" {
+    component [PostgreSQL Database] as Database
+    component [Document Storage] as Storage
+}
+
+Browser --> Gateway: HTTPS/JSON (Port 443)
+Gateway --> Backend: Proxied Requests (Port 8000)
+Backend --> Auth: Token Validation
+Backend --> Database: SQL Queries (Port 5432)
+Backend --> Storage: File Read/Write
+
+@enduml

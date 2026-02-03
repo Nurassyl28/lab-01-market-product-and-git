@@ -1,0 +1,26 @@
+@startuml Deployment_Diagram
+!theme plain
+
+title EduPlatform - Deployment Architecture
+
+node "User Computer" as UserComputer {
+    component [Web Browser] as Browser
+}
+
+node "Cloud VPS (Ubuntu 22.04)" as VPS {
+    node "Docker Runtime" as Docker {
+        component [Nginx\nReverse Proxy] as Nginx
+        component [FastAPI\nBackend Service] as API
+        database [PostgreSQL\nDatabase] as DB
+    }
+    node "Storage" as FileStorage {
+        component [Local/S3\nDocument Storage] as Storage
+    }
+}
+
+Browser --> Nginx: HTTPS (Port 443)
+Nginx --> API: HTTP (Port 8000)
+API --> DB: TCP (Port 5432)
+API --> Storage: Read/Write Files
+
+@enduml
