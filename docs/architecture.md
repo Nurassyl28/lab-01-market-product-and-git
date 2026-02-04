@@ -260,3 +260,14 @@ def list_courses(user: User = Depends(get_current_user)):
 5. **Analytics Dashboard** - Track student progress and engagement
 6. **Payment Integration** - If platform becomes commercial (Stripe/PayPal)
 7. **Two-Factor Authentication** - Enhanced security with TOTP or SMS
+
+## Advanced Database Design Patterns
+
+### Connection Pooling Strategy
+The system implements connection pooling to handle concurrent requests efficiently:
+- Pool size: 20-50 connections
+- Max overflow: 10 additional connections
+- Pool recycle: 3600 seconds
+- Using pgBouncer for production
+
+### Indexing Strategy
